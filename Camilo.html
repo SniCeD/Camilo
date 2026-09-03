@@ -552,12 +552,13 @@
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors",
           headers: {
             "Content-Type": "text/plain;charset=utf-8"
           },
           body: JSON.stringify(record)
         });
-        result = { isOk: response.ok };
+        result = { isOk: true };
       } catch (error) {
         result = { isOk: false };
       }
