@@ -562,7 +562,11 @@
         referencias: document.getElementById("referencias").value.trim(),
         acepta_pago: getSelectedValue("acepta_pago"),
         autoriza_portafolio: getSelectedValue("autoriza_portafolio"),
-        submitted_at: new Date().toISOString()
+        submitted_at: new Intl.DateTimeFormat("es-CL", {
+          dateStyle: "short",
+          timeStyle: "medium",
+          timeZone: "America/Santiago"
+        }).format(new Date())
       };
 
       try {
