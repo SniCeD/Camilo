@@ -174,7 +174,8 @@
     }
 
     .date-field,
-    .reference-field {
+    .reference-field,
+    .client-field {
       width: 100%;
       margin-top: 20px;
       border: 1px solid #454545;
@@ -199,12 +200,14 @@
     }
 
     .date-field:hover,
-    .reference-field:hover {
+    .reference-field:hover,
+    .client-field:hover {
       border-color: #727272;
     }
 
     .date-field:focus,
-    .reference-field:focus {
+    .reference-field:focus,
+    .client-field:focus {
       outline: none;
       border-color: var(--red-bright);
       box-shadow: 0 0 0 3px rgba(225, 29, 46, 0.22);
@@ -319,6 +322,13 @@
    <main class="content-frame mt-10 md:mt-14" aria-label="Formulario de brief de edición">
     <form id="brief-form" novalidate="">
      <div class="space-y-4">
+      <section data-template-id="client-identification-card" class="canva-panel question-card" aria-labelledby="client-identification-title" style="background: rgb(18, 18, 18);">
+       <div class="flex items-start gap-3"><span class="question-number" aria-hidden="true">01</span>
+        <h2 id="client-identification-title" class="canva-text brand-font m-0 pt-1" style="color: rgb(245, 243, 238); font-weight: 700; font-style: normal; font-size: 25px; letter-spacing: 0.03rem;">¿Cómo te identificamos?</h2>
+       </div>
+       <label class="sr-only" for="cliente_identificador">Tu nombre o alias</label>
+       <input id="cliente_identificador" name="cliente_identificador" class="client-field" type="text" placeholder="Escribe tu nombre o alias" autocomplete="name" maxlength="80" required>
+      </section>
       <fieldset data-template-id="question-1-card" class="canva-panel question-card" style="background: rgb(18, 18, 18);"><legend class="sr-only">Duración del material en bruto</legend>
        <div class="flex items-start gap-3"><span class="question-number" aria-hidden="true">01</span>
         <h2 data-template-id="question-1-title" class="canva-text brand-font m-0 pt-1" style="color: rgb(245, 243, 238); font-weight: 700; font-style: normal; font-size: 25px; letter-spacing: 0.03rem;">Duración del material en bruto</h2>
@@ -512,6 +522,12 @@
         }
       }
 
+      const clientInput = document.getElementById("cliente_identificador");
+      if (!clientInput.value.trim()) {
+        clientInput.focus();
+        return;
+      }
+
       const dateInput = document.getElementById("fecha_limite");
       if (!dateInput.value) dateInput.focus();
     }
@@ -535,6 +551,7 @@
       statusMessage.textContent = "Enviando brief…";
 
       const record = {
+        cliente_identificador: document.getElementById("cliente_identificador").value.trim(),
         duracion_material: getSelectedValue("duracion_material"),
         cantidad_archivos: getSelectedValue("cantidad_archivos"),
         urgencia: getSelectedValue("urgencia"),
