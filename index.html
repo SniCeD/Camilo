@@ -565,32 +565,32 @@
         submitted_at: new Date().toISOString()
       };
 
-      let result;
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors",
           headers: {
-            "Content-Type": "text/plain;charset=utf-8"
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(record)
         });
-        result = { isOk: true };
+
+        const text = await response.text();
+        const result = text ? JSON.parse(text) : { success: false };
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || "Error al enviar el brief.");
+        }
+
+        form.classList.add("hidden");
+        successView.classList.remove("hidden");
+        statusMessage.textContent = "";
+        successView.scrollIntoView({ behavior: "smooth", block: "center" });
       } catch (error) {
-        result = { isOk: false };
+        statusMessage.textContent = "No fue posible enviar el brief. Revisa la URL del Web App y la conexión.";
+        console.error(error);
+      } finally {
+        submitButton.disabled = false;
       }
-
-      submitButton.disabled = false;
-
-      if (!result.isOk) {
-        statusMessage.textContent = "No fue posible enviar el brief. Revisa tu conexión e inténtalo nuevamente.";
-        return;
-      }
-
-      form.classList.add("hidden");
-      successView.classList.remove("hidden");
-      statusMessage.textContent = "";
-      successView.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
     resetButton.addEventListener("click", function() {
