@@ -566,20 +566,14 @@
       };
 
       try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "text/plain;charset=utf-8"
           },
           body: JSON.stringify(record)
         });
-
-        const text = await response.text();
-        const result = text ? JSON.parse(text) : { success: false };
-
-        if (!response.ok || !result.success) {
-          throw new Error(result.error || "Error al enviar el brief.");
-        }
 
         form.classList.add("hidden");
         successView.classList.remove("hidden");
